@@ -13,6 +13,7 @@ namespace NetConfigProfile
         public string Name { get; set; }
         public InterfaceConfig[] Interfaces { get; set; }
         public ProxyConfig Proxy { get; set; }
+        public RouteConfig[] StaticRoutes { get; set; }
 
         /// <summary>
         /// NetworkProfileリストを取得

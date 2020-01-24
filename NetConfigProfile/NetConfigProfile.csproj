@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\RouteConfig.cs" />
     <Compile Include="Class\Serialize\DataSerializer.cs" />
     <Compile Include="Class\Serialize\DataType.cs" />
     <Compile Include="Class\Serialize\DictionaryExtensions.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Class\Serialize\XML.cs" />
     <Compile Include="Class\Serialize\YML.cs" />
     <Compile Include="Cmdlet\GetNetworkProfile.cs" />
+    <Compile Include="Cmdlet\NewRouteConfig.cs" />
     <Compile Include="Cmdlet\NewAddressConfig.cs" />
     <Compile Include="Cmdlet\GetInterfaceConfig.cs" />
     <Compile Include="Cmdlet\NewInterfaceConfig.cs" />
