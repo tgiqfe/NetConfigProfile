@@ -27,7 +27,7 @@ namespace NetConfigProfile
                         GetInstances().
                         OfType<ManagementObject>().
                         FirstOrDefault(x => Name.Equals(x["NetConnectionID"] as string, StringComparison.OrdinalIgnoreCase));
-                    if(netAdapter != null)
+                    if (netAdapter != null)
                     {
                         this._MACAddress = netAdapter["MACAddress"] as string;
                     }
@@ -101,35 +101,40 @@ namespace NetConfigProfile
                 FirstOrDefault(x => (x["SettingID"] as string).Equals(netAdapter["GUID"] as string));
             if (netConfig == null) { return; }
 
+            //  IPアドレス設定
             if (NetworkAddresses == null || NetworkAddresses.Length == 0)
             {
-                //  DHCP自動取得
                 netConfig.InvokeMethod("EnableDHCP", null);
             }
             else
             {
-                //  IPアドレス/サブネットマスク設定
                 netConfig.InvokeMethod("EnableStatic", new object[]
                 {
                     GetIPAddresses(),
                     GetSubnetMasks(),
                 });
             }
+
+            //  デフォルトゲートウェイ設定
             if (!string.IsNullOrEmpty(DefaultGateway))
             {
-                //  デフォルトゲートウェイ設定
                 netConfig.InvokeMethod("SetGateways", new object[]
                 {
                     new string[1]{ DefaultGateway },
                 });
             }
+
+            //  DNSサーバアドレス設定
             if (DNSServers != null && DNSServers.Length > 0)
             {
-                //  DNSサーバアドレス設定
                 netConfig.InvokeMethod("SetDNSServerSearchOrder", new object[]
                 {
                     DNSServers,
                 });
+            }
+            else
+            {
+                netConfig.InvokeMethod("SetDNSServerSearchOrder", new object[] { });
             }
         }
     }
