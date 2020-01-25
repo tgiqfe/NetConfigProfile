@@ -13,33 +13,16 @@ using System.IO;
 namespace NetConfigProfile.Cmdlet
 {
     [Cmdlet(VerbsDiagnostic.Test, "Process")]
-    public class TestProcess : PSCmdlet, IDynamicParameters
+    public class TestProcess : PSCmdlet
     {
         [Parameter]
         public string Name { get; set; }
 
-        //private static RuntimeDefinedParameterDictionary _staticStorage;
-
-        public object GetDynamicParameters()
-        {
-            RuntimeDefinedParameterDictionary dictionary = new RuntimeDefinedParameterDictionary();
-
-            Collection<Attribute> attributes = new Collection<Attribute>()
-            {
-                new ParameterAttribute(){ Position = 0 },
-                new ValidateSetAttribute(Directory.GetFiles(@"C:\Users\tq\Downloads\sample\san3")),
-            };
-            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter("FileName", typeof(string), attributes);
-            dictionary.Add("FileName", rdParam);
-
-            return dictionary;
-        }
+        
 
         protected override void ProcessRecord()
         {
-            string suji = "255";
-            WriteObject(Convert.ToString(int.Parse(suji), 2));
-
+            new InterfaceConfig().SetNetworkAddresses();
 
 
         }
@@ -113,4 +96,24 @@ public object GetDynamicParameters()
                 profile.Interface[0].GetIPAddresses(),
                 profile.Interface[0].GetSubnetMasks()});
 
+*/
+
+
+//private static RuntimeDefinedParameterDictionary _staticStorage;
+
+/*
+public object GetDynamicParameters()
+{
+ RuntimeDefinedParameterDictionary dictionary = new RuntimeDefinedParameterDictionary();
+
+ Collection<Attribute> attributes = new Collection<Attribute>()
+ {
+     new ParameterAttribute(){ Position = 0 },
+     new ValidateSetAttribute(Directory.GetFiles(@"C:\Users\tq\Downloads\sample\san3")),
+ };
+ RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter("FileName", typeof(string), attributes);
+ dictionary.Add("FileName", rdParam);
+
+ return dictionary;
+}
 */

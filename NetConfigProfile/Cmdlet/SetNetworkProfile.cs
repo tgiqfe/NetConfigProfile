@@ -14,6 +14,8 @@ namespace NetConfigProfile.Cmdlet
     [Cmdlet(VerbsCommon.Set, "NetworkProfile")]
     public class SetNetworkProfile : PSCmdlet, IDynamicParameters
     {
+        const string PARAM_Name = "Name";
+
         private List<NetworkProfile> _networkProfileList = null;
         private RuntimeDefinedParameterDictionary _dictionary;
 
@@ -30,23 +32,25 @@ namespace NetConfigProfile.Cmdlet
                 new ParameterAttribute(){ Mandatory = true, Position = 0 },
                 new ValidateSetAttribute(_networkProfileList.Select(x => x.Name).ToArray()),
             };
-            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter("Name", typeof(string), attributes);
-            _dictionary.Add("Name", rdParam);
+            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter(PARAM_Name, typeof(string), attributes);
+            _dictionary.Add(PARAM_Name, rdParam);
 
             return _dictionary;
         }
 
         protected override void ProcessRecord()
         {
-            if (!_dictionary.ContainsKey("Name")) { return; }
+            if (!_dictionary.ContainsKey(PARAM_Name)) { return; }
 
-            string Name = _dictionary["Name"].Value as string;
+            string Name = _dictionary[PARAM_Name].Value as string;
             NetworkProfile networkProfile = _networkProfileList.FirstOrDefault(x =>
                 x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
             if (networkProfile != null)
             {
                 foreach (InterfaceConfig ic in networkProfile.Interfaces)
                 {
+                    ic.SetNetworkAddresses();
+                    /*
                     ManagementObject netAdapter = new ManagementClass("Win32_NetworkAdapter").
                         GetInstances().
                         OfType<ManagementObject>().
@@ -88,6 +92,7 @@ namespace NetConfigProfile.Cmdlet
                             ic.DNSServers,
                         });
                     }
+                    */
                 }
             }
             _networkProfileList = null;

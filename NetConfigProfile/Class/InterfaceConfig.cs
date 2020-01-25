@@ -45,7 +45,7 @@ namespace NetConfigProfile
                 GetInstances().
                 OfType<ManagementObject>().
                 FirstOrDefault(x => name.Equals(x["NetConnectionID"] as string, StringComparison.OrdinalIgnoreCase));
-            if(netAdapter == null) { return null; }
+            if (netAdapter == null) { return null; }
 
             ManagementObject netConfig = new ManagementClass("Win32_NetworkAdapterConfiguration").
                 GetInstances().
@@ -62,6 +62,55 @@ namespace NetConfigProfile
             ic.DNSServers = netConfig["DNSServerSearchOrder"] as string[];
 
             return ic;
+        }
+
+        /// <summary>
+        /// IPアドレス/サブネットマスク/デフォルトゲートウェイ/DNSサーバアドレスを設定
+        /// </summary>
+        internal void SetNetworkAddresses()
+        {
+            ManagementObject netAdapter = new ManagementClass("Win32_NetworkAdapter").
+                GetInstances().
+                OfType<ManagementObject>().
+                FirstOrDefault(x => Name.Equals(x["NetConnectionID"] as string, StringComparison.OrdinalIgnoreCase));
+            if (netAdapter == null) { return; }
+
+            ManagementObject netConfig = new ManagementClass("Win32_NetworkAdapterConfiguration").
+                GetInstances().
+                OfType<ManagementObject>().
+                FirstOrDefault(x => (x["SettingID"] as string).Equals(netAdapter["GUID"] as string));
+            if (netConfig == null) { return; }
+
+            if (NetworkAddresses == null || NetworkAddresses.Length == 0)
+            {
+                //  DHCP自動取得
+                netConfig.InvokeMethod("EnableDHCP", null);
+            }
+            else
+            {
+                //  IPアドレス/サブネットマスク設定
+                netConfig.InvokeMethod("EnableStatic", new object[]
+                {
+                    GetIPAddresses(),
+                    GetSubnetMasks(),
+                });
+            }
+            if (!string.IsNullOrEmpty(DefaultGateway))
+            {
+                //  デフォルトゲートウェイ設定
+                netConfig.InvokeMethod("SetGateways", new object[]
+                {
+                    new string[1]{ DefaultGateway },
+                });
+            }
+            if (DNSServers != null && DNSServers.Length > 0)
+            {
+                //  DNSサーバアドレス設定
+                netConfig.InvokeMethod("SetDNSServerSearchOrder", new object[]
+                {
+                    DNSServers,
+                });
+            }
         }
     }
 }

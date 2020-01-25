@@ -13,6 +13,8 @@ namespace NetConfigProfile.Cmdlet
     [Cmdlet(VerbsCommon.Get, "NetworkProfile")]
     public class GetNetworkProfile : PSCmdlet, IDynamicParameters
     {
+        const string PARAM_Name = "Name";
+
         [Parameter]
         public SwitchParameter Json { get; set; }
 
@@ -32,17 +34,17 @@ namespace NetConfigProfile.Cmdlet
                 new ParameterAttribute(){ Position = 0 },
                 new ValidateSetAttribute(_networkProfileList.Select(x => x.Name).ToArray()),
             };
-            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter("Name", typeof(string), attributes);
-            _dictionary.Add("Name", rdParam);
+            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter(PARAM_Name, typeof(string), attributes);
+            _dictionary.Add(PARAM_Name, rdParam);
 
             return _dictionary;
         }
 
         protected override void ProcessRecord()
         {
-            if (_dictionary.ContainsKey("Name"))
+            if (_dictionary.ContainsKey(PARAM_Name))
             {
-                string Name = _dictionary["Name"].Value as string;
+                string Name = _dictionary[PARAM_Name].Value as string;
                 NetworkProfile profile = _networkProfileList.First(x => x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
                 if (Json)
                 {
