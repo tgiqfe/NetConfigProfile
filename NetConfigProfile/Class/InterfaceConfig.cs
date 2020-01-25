@@ -16,6 +16,23 @@ namespace NetConfigProfile
         public string DefaultGateway { get; set; }
         public string[] DNSServers { get; set; }
 
+        private string _MACAddress = null;
+        public string MACAddress
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_MACAddress) && !string.IsNullOrEmpty(Name))
+                {
+                    ManagementObject netAdapter = new ManagementClass("Win32_NetworkAdapter").
+                        GetInstances().
+                        OfType<ManagementObject>().
+                        FirstOrDefault(x => Name.Equals(x["NetConnectionID"] as string, StringComparison.OrdinalIgnoreCase));
+                    this._MACAddress = netAdapter["MACAddress"] as string;
+                }
+                return this._MACAddress;
+            }
+        }
+
         /// <summary>
         /// 登録されているIPアドレスの配列を取得
         /// </summary>

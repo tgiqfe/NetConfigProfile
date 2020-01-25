@@ -45,28 +45,30 @@ namespace NetConfigProfile.Cmdlet
             if (_dictionary.ContainsKey(PARAM_Name))
             {
                 string Name = _dictionary[PARAM_Name].Value as string;
-                NetworkProfile profile = _networkProfileList.First(x => x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                if (Json)
+                if (string.IsNullOrEmpty(Name))
                 {
-                    WriteObject(DataSerializer.Serialize<NetworkProfile>(profile, DataType.Json), true);
+                    if (Json)
+                    {
+                        WriteObject(DataSerializer.Serialize<List<NetworkProfile>>(_networkProfileList, DataType.Json), true);
+                    }
+                    else
+                    {
+                        WriteObject(_networkProfileList, true);
+                    }
                 }
                 else
                 {
-                    WriteObject(profile, true);
+                    NetworkProfile profile = _networkProfileList.First(x => x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
+                    if (Json)
+                    {
+                        WriteObject(DataSerializer.Serialize<NetworkProfile>(profile, DataType.Json), true);
+                    }
+                    else
+                    {
+                        WriteObject(profile, true);
+                    }
                 }
             }
-            else
-            {
-                if (Json)
-                {
-                    WriteObject(DataSerializer.Serialize<List<NetworkProfile>>(_networkProfileList, DataType.Json), true);
-                }
-                else
-                {
-                    WriteObject(_networkProfileList, true);
-                }
-            }
-
             _networkProfileList = null;
         }
     }
