@@ -12,6 +12,8 @@ namespace NetConfigProfile.Cmdlet
     [Cmdlet(VerbsCommon.Get, "InterfaceConfig")]
     public class GetInterfaceConfig : PSCmdlet, IDynamicParameters
     {
+        const string PARAM_Name = "Name";
+
         private string[] _interfaceNames = null;
         private RuntimeDefinedParameterDictionary _dictionary;
 
@@ -33,15 +35,15 @@ namespace NetConfigProfile.Cmdlet
                 new ParameterAttribute(){ Position = 0 },
                 new ValidateSetAttribute(_interfaceNames),
             };
-            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter("Name", typeof(string), attributes);
-            _dictionary.Add("Name", rdParam);
+            RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter(PARAM_Name, typeof(string), attributes);
+            _dictionary.Add(PARAM_Name, rdParam);
 
             return _dictionary;
         }
 
         protected override void ProcessRecord()
         {
-            string Name = _dictionary["Name"].Value as string;
+            string Name = _dictionary[PARAM_Name].Value as string;
 
             List<InterfaceConfig> icList = new List<InterfaceConfig>();
             if (string.IsNullOrEmpty(Name))

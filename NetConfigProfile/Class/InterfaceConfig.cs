@@ -27,7 +27,10 @@ namespace NetConfigProfile
                         GetInstances().
                         OfType<ManagementObject>().
                         FirstOrDefault(x => Name.Equals(x["NetConnectionID"] as string, StringComparison.OrdinalIgnoreCase));
-                    this._MACAddress = netAdapter["MACAddress"] as string;
+                    if(netAdapter != null)
+                    {
+                        this._MACAddress = netAdapter["MACAddress"] as string;
+                    }
                 }
                 return this._MACAddress;
             }

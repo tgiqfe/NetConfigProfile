@@ -18,42 +18,18 @@ namespace NetConfigProfile.Cmdlet
         public InterfaceConfig[] Interfaces { get; set; }
         [Parameter(Position = 2)]
         public ProxyConfig Proxy { get; set; }
-        [Parameter]
-        public string ProfileDir { get; set; }
-
-        private string _currentDirectory = null;
-
-        protected override void BeginProcessing()
-        {
-            //  カレントディレクトリカレントディレクトリの一時変更
-            _currentDirectory = Environment.CurrentDirectory;
-            Environment.CurrentDirectory = this.SessionState.Path.CurrentFileSystemLocation.Path;
-        }
+        [Parameter(Position = 3)]
+        public RouteConfig[] StaticRoutes { get; set; }
 
         protected override void ProcessRecord()
         {
-            if (string.IsNullOrEmpty(ProfileDir))
-            {
-                ProfileDir = Item.WorkDirectory;
-            }
-            if (!Directory.Exists(ProfileDir))
-            {
-                Directory.CreateDirectory(ProfileDir);
-            }
-
             DataSerializer.Serialize<NetworkProfile>(
                 new NetworkProfile()
                 {
                     Name = Name,
                     Interfaces = Interfaces,
                     Proxy = Proxy,
-                }, Path.Combine(ProfileDir, Name + ".json"));
-        }
-
-        protected override void EndProcessing()
-        {
-            //  カレントディレクトリを戻す
-            Environment.CurrentDirectory = _currentDirectory;
+                }, Path.Combine(Item.WorkDirectory, Name + ".json"));
         }
     }
 }
