@@ -66,8 +66,9 @@
     <Compile Include="Cmdlet\GetInterfaceConfig.cs" />
     <Compile Include="Cmdlet\NewInterfaceConfig.cs" />
     <Compile Include="Cmdlet\NewProxyConfig.cs" />
-    <Compile Include="Cmdlet\RegisterNetworkProfile.cs" />
     <Compile Include="Cmdlet\SetNetworkProfile.cs" />
+    <Compile Include="Cmdlet\RegisterNetworkProfile.cs" />
+    <Compile Include="Cmdlet\SetIPConfig.cs" />
     <Compile Include="Cmdlet\TestProcess.cs" />
     <Compile Include="Function.cs" />
     <Compile Include="Class\InterfaceConfig.cs" />

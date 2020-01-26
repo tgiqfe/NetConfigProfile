@@ -4,19 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
-using System.IO;
 using NetConfigProfile.Serialize;
+using System.IO;
 using System.Collections.ObjectModel;
 
 namespace NetConfigProfile.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "NetworkProfile")]
-    public class GetNetworkProfile : PSCmdlet, IDynamicParameters
+    [Cmdlet(VerbsCommon.Set, "NetworkProfile")]
+    public class SetNetworkProfile : PSCmdlet, IDynamicParameters
     {
         const string PARAM_Name = "Name";
 
-        [Parameter]
-        public SwitchParameter Json { get; set; }
+        [Parameter(Position = 1)]
+        public InterfaceConfig[] Interfaces { get; set; }
+        [Parameter(Position = 2)]
+        public ProxyConfig Proxy { get; set; }
+        [Parameter(Position = 3)]
+        public RouteConfig[] StaticRoutes { get; set; }
 
         private List<NetworkProfile> _networkProfileList = null;
         private RuntimeDefinedParameterDictionary _dictionary;
@@ -31,7 +35,7 @@ namespace NetConfigProfile.Cmdlet
             _dictionary = new RuntimeDefinedParameterDictionary();
             Collection<Attribute> attributes = new Collection<Attribute>()
             {
-                new ParameterAttribute(){ Position = 0 },
+                new ParameterAttribute(){ Position = 0, Mandatory = true },
                 new ValidateSetAttribute(_networkProfileList.Select(x => x.Name).ToArray()),
             };
             RuntimeDefinedParameter rdParam = new RuntimeDefinedParameter(PARAM_Name, typeof(string), attributes);
@@ -47,26 +51,12 @@ namespace NetConfigProfile.Cmdlet
                 string Name = _dictionary[PARAM_Name].Value as string;
                 if (string.IsNullOrEmpty(Name))
                 {
-                    if (Json)
-                    {
-                        WriteObject(DataSerializer.Serialize<List<NetworkProfile>>(_networkProfileList, DataType.Json), true);
-                    }
-                    else
-                    {
-                        WriteObject(_networkProfileList, true);
-                    }
-                }
-                else
-                {
-                    NetworkProfile profile = _networkProfileList.First(x => x.Name.Equals(Name, StringComparison.OrdinalIgnoreCase));
-                    if (Json)
-                    {
-                        WriteObject(DataSerializer.Serialize<NetworkProfile>(profile, DataType.Json), true);
-                    }
-                    else
-                    {
-                        WriteObject(profile, true);
-                    }
+                    NetworkProfile profile = _networkProfileList.First(x => x.Name == Name);
+                    if (Interfaces != null) { profile.Interfaces = Interfaces; }
+                    if (Proxy != null) { profile.Proxy = Proxy; }
+                    if (StaticRoutes != null) { profile.StaticRoutes = StaticRoutes; }
+                    DataSerializer.Serialize<NetworkProfile>(
+                        profile, Path.Combine(Item.WorkDirectory, Name + ".json"));
                 }
             }
         }
