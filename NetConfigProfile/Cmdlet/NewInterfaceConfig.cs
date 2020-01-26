@@ -17,11 +17,11 @@ namespace NetConfigProfile.Cmdlet
         [Parameter]
         public bool Enabled { get; set; } = true;
         [Parameter]
-        public AddressConfig[] NetworkAddress { get; set; }
+        public AddressConfig[] NetworkAddresses { get; set; }
         [Parameter]
         public string DefaultGateway { get; set; }
         [Parameter]
-        public string[] DNSServer { get; set; }
+        public string[] DNSServers { get; set; }
 
         private string[] _interfaceNames = null;
         private RuntimeDefinedParameterDictionary _dictionary;
@@ -60,9 +60,9 @@ namespace NetConfigProfile.Cmdlet
                 {
                     Name = Name,
                     Enabled = Enabled,
-                    NetworkAddresses = NetworkAddress,
+                    NetworkAddresses = NetworkAddresses,
                     DefaultGateway = DefaultGateway,
-                    DNSServers = DNSServer
+                    DNSServers = DNSServers
                 }, true);
             }
         }

@@ -49,7 +49,7 @@ namespace NetConfigProfile.Cmdlet
             if (_dictionary.ContainsKey(PARAM_Name))
             {
                 string Name = _dictionary[PARAM_Name].Value as string;
-                if (string.IsNullOrEmpty(Name))
+                if (!string.IsNullOrEmpty(Name))
                 {
                     NetworkProfile profile = _networkProfileList.First(x => x.Name == Name);
                     if (Interfaces != null) { profile.Interfaces = Interfaces; }
