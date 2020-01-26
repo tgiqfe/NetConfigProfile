@@ -87,7 +87,7 @@ namespace NetConfigProfile
         /// <summary>
         /// IPアドレス/サブネットマスク/デフォルトゲートウェイ/DNSサーバアドレスを設定
         /// </summary>
-        internal void SetNetworkAddresses()
+        internal void ChangeNetworkAddresses()
         {
             ManagementObject netAdapter = new ManagementClass("Win32_NetworkAdapter").
                 GetInstances().

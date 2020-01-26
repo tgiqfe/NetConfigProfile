@@ -22,7 +22,7 @@ namespace NetConfigProfile.Cmdlet
 
         protected override void ProcessRecord()
         {
-            new InterfaceConfig().SetNetworkAddresses();
+            new InterfaceConfig().ChangeNetworkAddresses();
 
 
         }
