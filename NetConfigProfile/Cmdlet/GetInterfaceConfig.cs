@@ -9,6 +9,9 @@ using System.Collections.ObjectModel;
 
 namespace NetConfigProfile.Cmdlet
 {
+    /// <summary>
+    /// 指定したインタフェース設定を取得
+    /// </summary>
     [Cmdlet(VerbsCommon.Get, "InterfaceConfig")]
     public class GetInterfaceConfig : PSCmdlet, IDynamicParameters
     {

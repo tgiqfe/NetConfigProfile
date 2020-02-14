@@ -19,7 +19,7 @@ namespace NetConfigProfile.Cmdlet
         [Parameter]
         public AddressConfig[] NetworkAddresses { get; set; }
         [Parameter]
-        public string DefaultGateway { get; set; }
+        public string[] DefaultGateway { get; set; }
         [Parameter]
         public string[] DNSServers { get; set; }
 

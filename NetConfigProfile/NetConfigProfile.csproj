@@ -60,6 +60,7 @@
     <Compile Include="Class\Serialize\SerializableDictionary.cs" />
     <Compile Include="Class\Serialize\XML.cs" />
     <Compile Include="Class\Serialize\YML.cs" />
+    <Compile Include="Cmdlet\GetIPAddressSummary.cs" />
     <Compile Include="Cmdlet\GetNetworkProfile.cs" />
     <Compile Include="Cmdlet\NewRouteConfig.cs" />
     <Compile Include="Cmdlet\NewAddressConfig.cs" />

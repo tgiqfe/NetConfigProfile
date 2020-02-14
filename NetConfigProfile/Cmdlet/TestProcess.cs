@@ -22,7 +22,17 @@ namespace NetConfigProfile.Cmdlet
 
         protected override void ProcessRecord()
         {
-            new InterfaceConfig().ChangeNetworkAddresses();
+
+            foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").
+                GetInstances().
+                OfType<ManagementObject>().
+                Where(x => x["NetConnectionID"] != null))
+            {
+
+
+                WriteObject(InterfaceConfig.Load(mo["NetConnectionID"] as string));
+            }
+
 
 
         }

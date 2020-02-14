@@ -13,7 +13,7 @@ namespace NetConfigProfile
         public string Name { get; set; }
         public bool Enabled { get; set; }
         public AddressConfig[] NetworkAddresses { get; set; }
-        public string DefaultGateway { get; set; }
+        public string[] DefaultGateway { get; set; }
         public string[] DNSServers { get; set; }
 
         private string _MACAddress = null;
@@ -74,11 +74,17 @@ namespace NetConfigProfile
             if (netConfig == null) { return null; }
 
             InterfaceConfig ic = new InterfaceConfig() { Name = name };
-            if (!(bool)netConfig["DHCPEnabled"])
-            {
+
+            //  ↓これでは想定通りに有効/無効が判断できない
+            //      https://qiita.com/mizar/items/de4d736ea5d86c5f83c4#%E6%A9%9F%E8%83%BD%E7%84%A1%E5%8A%B9%E5%8C%96%E3%83%AC%E3%82%B7%E3%83%94
+            //      を参考に、あとで修正すること
+            ic.Enabled = (bool)netAdapter["NetEnabled"]; 
+            
+            //if (!(bool)netConfig["DHCPEnabled"])
+            //{
                 ic.NetworkAddresses = AddressConfig.FromStringArray(netConfig["IPAddress"] as string[], netConfig["IPSubnet"] as string[]);
-                ic.DefaultGateway = netConfig["DefaultIPGateway"] as string;
-            }
+                ic.DefaultGateway = netConfig["DefaultIPGateway"] as string[];
+            //}
             ic.DNSServers = netConfig["DNSServerSearchOrder"] as string[];
 
             return ic;
@@ -116,11 +122,11 @@ namespace NetConfigProfile
             }
 
             //  デフォルトゲートウェイ設定
-            if (!string.IsNullOrEmpty(DefaultGateway))
+            if (DefaultGateway != null && DefaultGateway.Length > 0)
             {
                 netConfig.InvokeMethod("SetGateways", new object[]
                 {
-                    new string[1]{ DefaultGateway },
+                    DefaultGateway,
                 });
             }
 

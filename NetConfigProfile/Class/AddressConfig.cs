@@ -109,7 +109,7 @@ namespace NetConfigProfile
                     addressConfigList.Add(new AddressConfig(ipAddresses[i], subnetMasks[i]));
                 }
             }
-            return addressConfigList.ToArray();
+            return addressConfigList.Count == 0 ? null : addressConfigList.ToArray();
         }
     }
 }
