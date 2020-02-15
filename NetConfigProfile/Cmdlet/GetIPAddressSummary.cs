@@ -16,10 +16,7 @@ namespace NetConfigProfile.Cmdlet
         {
             List<InterfaceConfig> icList = new List<InterfaceConfig>();
 
-            foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").
-                GetInstances().
-                OfType<ManagementObject>().
-                Where(x => x["NetConnectionID"] != null))
+            foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").GetInstances())
             {
                 if (IsPhysicalInterface(mo))
                 {
@@ -54,15 +51,19 @@ namespace NetConfigProfile.Cmdlet
         /// <summary>
         /// Win32_NetworkAdapterのName値から判断して、IPAddressSummaryを取得するかどうかを判断
         /// </summary>
-        /// <param name="mo"></param>
+        /// <param name="netAdapter"></param>
         /// <returns></returns>
-        private bool IsPhysicalInterface(ManagementObject mo)
+        private bool IsPhysicalInterface(ManagementObject netAdapter)
         {
-            if (WellKnownInvalidNames.Any(x => mo["Name"].ToString().StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            if (!(bool)netAdapter["PhysicalAdapter"])
             {
                 return false;
             }
-            if (WellKnownValidNames.Any(x => mo["Name"].ToString().StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            if (WellKnownInvalidNames.Any(x => netAdapter["Name"].ToString().StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            if (WellKnownValidNames.Any(x => netAdapter["Name"].ToString().StartsWith(x, StringComparison.OrdinalIgnoreCase)))
             {
                 return true;
             }

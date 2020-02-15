@@ -76,8 +76,7 @@ namespace NetConfigProfile
             InterfaceConfig ic = new InterfaceConfig() { Name = name };
 
             //  ↓これでは想定通りに有効/無効が判断できない
-            //      https://qiita.com/mizar/items/de4d736ea5d86c5f83c4#%E6%A9%9F%E8%83%BD%E7%84%A1%E5%8A%B9%E5%8C%96%E3%83%AC%E3%82%B7%E3%83%94
-            //      を参考に、あとで修正すること
+            //    あとで修正すること
             ic.Enabled = (bool)netAdapter["NetEnabled"]; 
             
             //if (!(bool)netConfig["DHCPEnabled"])

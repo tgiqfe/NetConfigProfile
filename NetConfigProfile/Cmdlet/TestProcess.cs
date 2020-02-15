@@ -23,31 +23,39 @@ namespace NetConfigProfile.Cmdlet
         protected override void ProcessRecord()
         {
 
-            string ifName = "イーサネット 2";
+            string ifName = "イーサネット";
             string pnpid = "";
+
+            
+
 
             foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").GetInstances())
             {
-                if (mo["NetConnectionID"] != null &&
-                    mo["NetConnectionID"].ToString().Equals(ifName, StringComparison.OrdinalIgnoreCase))
+                if ((bool)mo["PhysicalAdapter"])
                 {
-                    pnpid = mo["PNPDeviceID"] as string;
+                    Console.WriteLine(mo["NetConnectionID"]);
                 }
             }
 
+            /*
             Console.WriteLine(pnpid);
 
             foreach (ManagementObject mo in
                 new ManagementClass(@"root\wmi", "MSPower_DeviceEnable", new ObjectGetOptions()).
                 GetInstances())
             {
-                if(pnpid.Equals(mo["InstanceName"].ToString(), StringComparison.OrdinalIgnoreCase))
+                if(mo["InstanceName"].ToString().StartsWith(pnpid, StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine(ifName);
                     Console.WriteLine(mo["InstanceName"]);
+
+                    mo["Enable"] = true;
+                    mo.Put();
+                    
                 }
                 
             }
+            */
 
 
 
