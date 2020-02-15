@@ -18,19 +18,35 @@ namespace NetConfigProfile.Cmdlet
         [Parameter]
         public string Name { get; set; }
 
-        
+
 
         protected override void ProcessRecord()
         {
 
-            foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").
-                GetInstances().
-                OfType<ManagementObject>().
-                Where(x => x["NetConnectionID"] != null))
+            string ifName = "イーサネット 2";
+            string pnpid = "";
+
+            foreach (ManagementObject mo in new ManagementClass("Win32_NetworkAdapter").GetInstances())
             {
+                if (mo["NetConnectionID"] != null &&
+                    mo["NetConnectionID"].ToString().Equals(ifName, StringComparison.OrdinalIgnoreCase))
+                {
+                    pnpid = mo["PNPDeviceID"] as string;
+                }
+            }
 
+            Console.WriteLine(pnpid);
 
-                WriteObject(InterfaceConfig.Load(mo["NetConnectionID"] as string));
+            foreach (ManagementObject mo in
+                new ManagementClass(@"root\wmi", "MSPower_DeviceEnable", new ObjectGetOptions()).
+                GetInstances())
+            {
+                if(pnpid.Equals(mo["InstanceName"].ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine(ifName);
+                    Console.WriteLine(mo["InstanceName"]);
+                }
+                
             }
 
 
