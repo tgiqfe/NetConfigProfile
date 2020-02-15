@@ -36,6 +36,8 @@ namespace NetConfigProfile.Cmdlet
         {
             "Intel(R) Ethernet Connection",
             "Intel(R) Dual Band Wireless",
+            "Realtek USB GbE Family Controller",
+            "Killer Wireless-n/a/ac",
         };
 
         /// <summary>
@@ -44,7 +46,9 @@ namespace NetConfigProfile.Cmdlet
         private string[] WellKnownInvalidNames = new string[]
         {
             "VMware Virtual Ethernet Adapter",
+            "VirtualBox Host-Only Ethernet Adapter",
             "Bluetooth Device",
+            "TAP-Windows Adapter",
         };
 
         /// <summary>
@@ -77,5 +81,9 @@ VMware Virtual Ethernet Adapter for VMnet8
 Intel(R) Ethernet Connection (2) I219-LM
 Intel(R) Dual Band Wireless-AC 8260
 Bluetooth Device (Personal Area Network)
+Killer Wireless-n/a/ac 1435 Wireless Network Adapter
+TAP-Windows Adapter V9
+Realtek USB GbE Family Controller #2
+VirtualBox Host-Only Ethernet Adapter
 
 */
